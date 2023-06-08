@@ -1,6 +1,5 @@
 //import net.coobird.thumbnailator.Thumbnails;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -37,41 +36,78 @@ public class Main {
     }
 
     public static void criaarq(String[] nomes) {
-        String[] nomesOrigem = {"EntityOrigem", "FiltroEntityOrigem", "entityOrigem", "entity_origem", "entityorigem", "ENTITYORIGEM"};
-        String[] nomesFim    = {"EntidadeFim", "FiltroEntidadeFim", "entidadeFim", "entidade_fim", "entidadefim", "ENTIDADEFIM"};
-        final String root = "/home/gleiton/git/testes/src/main/java/javerde/com/br";
-        final String[] originals = {
-                root + "/domain/%s.java",
-                root + "/domain/Filtro%s.java",
-                root + "/dao/%sDao.java"
+        String[] nomesOrigem = {"ValorTributoAtividade"
+                , "FiltroValorTributoAtividade"
+                , "valorTributoAtividade"
+                , "valor_tributo_atividade"
+                , "valortributoatividade"
+                , "TBVALORTRIBUTOATIVIDADE"
+                , "CTRIBUCODI"
+                , "Valor Tributo Atividade"
         };
-        Path path0 = null;
-        Path path1 = null;
+        String[] nomesFim    = {"DocumentoDevolvido"
+                , "FiltroDocumentoDevolvido"
+                , "documentoDevolvido"
+                , "documento_devolvido"
+                , "documentodevolvido"
+                , "TBMERCANTILDOCDEVOLVIDO"
+                , "ADCDEVSEQU"
+                , "Documento Devolvido"
+        };
+        final String root = "C:\\rep\\cadm\\codigos\\cadm\\src\\main\\java\\br\\gov\\emprel\\cadm";
+        final String rootView = "C:\\rep\\cadm\\codigos\\cadm\\src\\main\\webapp\\views";
+        final String[] paths = {
+                root + "\\domain\\%s.java",
+                root + "\\domain\\filter\\Filtro%s.java",
+                root + "\\domain\\filter\\historico\\Filtro%sHistorico.java",
+                root + "\\domain\\historico\\%sHistorico.java",
+                root + "\\domain\\historico\\%sHistoricoPK.java",
+                root + "\\dao\\%sDao.java",
+                root + "\\dao\\historico\\%sHistoricoDao.java",
+                root + "\\manager\\%sManager.java",
+                root + "\\manager\\historico\\%sHistoricoManager.java"
+        };
+        final String[] pathsViews = {
+                root + "\\web\\%s\\%sSearchBean.java",
+                root + "\\web\\%s\\%sEditBean.java",
+                rootView + "\\%s\\%sSearch.xhtml",
+                rootView + "\\%s\\%sEdit.xhtml",
+                rootView + "\\%s\\aba\\aba%sHistorico.xhtml"
+        };
         String origem = "";
         String fim = "";
-        List<String> newLines = new ArrayList<>();
-        for (String strPath: originals) {
+        for (String strPath: paths) {
             origem = String.format(strPath, nomesOrigem[0]);
             fim = String.format(strPath, nomesFim[0]);
-            System.out.println(origem);
-            System.out.println(fim);
-            path0 = Paths.get(origem);
-            path1 = Paths.get(fim);
-            try {
-                newLines = new ArrayList<>();
-                for (String l : Files.readAllLines(path0)) {
-                    newLines.add(corrigirLinha(l, nomesOrigem, nomesFim));
-                }
-                Files.write(Paths.get(fim), newLines, StandardCharsets.UTF_8);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            criarDocumentoFim(origem, fim, nomesOrigem, nomesFim);
+        }
+        try {
+            Files.createDirectories(Paths.get(root + "\\web\\" + nomesFim[4]));
+            Files.createDirectories(Paths.get(rootView + "\\" + nomesFim[4] + "\\aba"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (String strPath: pathsViews) {
+            int i = strPath.endsWith("Historico.xhtml") || strPath.endsWith("Bean.java") ? 0 : 2;
+            origem = String.format(strPath, nomesOrigem[4], nomesOrigem[i]);
+            fim = String.format(strPath, nomesFim[4], nomesFim[i]);
+            criarDocumentoFim(origem, fim, nomesOrigem, nomesFim);
+        }
+        System.out.println("**** DOCUMENTOS GERADOS COM SUCESSO EU ACHO ****");
+    }
+
+    public static void criarDocumentoFim(String origem, String fim, String[] nomesOrigem, String[] nomesFim) {
+        Path pathOrigem = Paths.get(origem);
+        Path pathFim = Paths.get(fim);
+        List<String> newLines = new ArrayList<>();
+        System.out.println(origem + "\n" + fim + "\n");
+        try {
+            for (String l : Files.readAllLines(pathOrigem)) {
+                newLines.add(corrigirLinha(l, nomesOrigem, nomesFim));
             }
-//            try {
-//                Files.copy(path0.normalize(), path1.normalize());
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-            System.out.println();
+            Files.write(pathFim, newLines, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
