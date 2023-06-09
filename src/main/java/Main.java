@@ -45,14 +45,14 @@ public class Main {
                 , "CTRIBUCODI"
                 , "Valor Tributo Atividade"
         };
-        String[] nomesFim    = {"DocumentoDevolvido"
-                , "FiltroDocumentoDevolvido"
-                , "documentoDevolvido"
-                , "documento_devolvido"
-                , "documentodevolvido"
-                , "TBMERCANTILDOCDEVOLVIDO"
-                , "ADCDEVSEQU"
-                , "Documento Devolvido"
+        String[] nomesFim = {"MotivoDevolucao"
+                , "FiltroMotivoDevolucao"
+                , "motivoDevolucao"
+                , "motivo_devolucao"
+                , "motivodevolucao"
+                , "TBMOTIVODEVOLUCAODOCUMENTO"
+                , "CMODEVCODI"
+                , "Motivo Devolucao"
         };
         final String root = "C:\\rep\\cadm\\codigos\\cadm\\src\\main\\java\\br\\gov\\emprel\\cadm";
         final String rootView = "C:\\rep\\cadm\\codigos\\cadm\\src\\main\\webapp\\views";
